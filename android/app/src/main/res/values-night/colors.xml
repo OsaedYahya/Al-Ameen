@@ -2,5 +2,5 @@
 <resources>
     <color name="white">#000</color>
     <color name="notification_color">#5EC3ED</color>
-    <color name="bootsplash_background">#1C1C21</color>
+    <color name="bootsplash_background">#9E182B</color>
 </resources>

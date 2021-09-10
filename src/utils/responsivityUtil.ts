@@ -11,7 +11,7 @@ const normalize = (size: number) => {
   return Math.round(PixelRatio.roundToNearestPixel(newSize));
 };
 
-const guidelineBaseWidth = 350;
+export const guidelineBaseWidth = 350;
 const guidelineBaseHeight = 680;
 
 const scale = (size: number) => (SCREEN_WIDTH / guidelineBaseWidth) * size;

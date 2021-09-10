@@ -10,7 +10,8 @@ const INITIAL_MAINTENANCE_MODE_STATE: AuthInterface = {
   refreshToken: null,
   isUnderMaintainance: false,
   isUnderForceUpgrade: false,
-  user: undefined
+  user: undefined,
+  userID: undefined
 };
 
 export const authSlice = createSlice({
@@ -22,6 +23,7 @@ export const authSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<AuthInterface>) => {
       state.user = action.payload.user;
+      state.userID = action.payload.userID;
       state.userToken = action.payload.userToken;
       state.refreshToken = action.payload.refreshToken;
     }

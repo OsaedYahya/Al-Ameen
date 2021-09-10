@@ -1,27 +1,31 @@
-import AddPostScreen from "~/containers/addPost";
 import AxiosInterceptor from "~/containers/axiosInterceptor";
-import OrdersPage from "~/containers/destinations";
+import EvaluationPageScreen from "~/containers/evaluationPage";
+import EvaluationPageScreen1 from "~/containers/evaluationPage1";
+import EvaluationPageScreen2 from "~/containers/evaluationPage2";
+import EvaluationPageScreen3 from "~/containers/evaluationPage3";
 import ForceUpdateScreen from "~/containers/forceUpdate";
 import HomeScreen from "~/containers/home";
-import JoinUsScreen from "~/containers/joinUs";
 import LoginScreen from "~/containers/login";
-import MaintenanceModeScreen from "~/containers/maintenanceMode";
 import OfflineScreen from "~/containers/offline";
-import PointsBankScreen from "~/containers/pointsBank";
+import OrderDetailsScreen from "~/containers/orderDetails";
+import OrdersPage from "~/containers/ordersPage";
 import ProfileScreen from "~/containers/profile";
+import ProjectDetailsScreen from "~/containers/projectDetails";
 import SettingsScreen from "~/containers/settings";
 
 export {
   HomeScreen,
   OrdersPage,
-  AddPostScreen,
   ProfileScreen,
   SettingsScreen,
+  EvaluationPageScreen,
+  EvaluationPageScreen1,
+  EvaluationPageScreen2,
+  EvaluationPageScreen3,
   LoginScreen,
-  PointsBankScreen,
+  OrderDetailsScreen,
+  ProjectDetailsScreen,
   AxiosInterceptor,
   OfflineScreen,
   ForceUpdateScreen,
-  MaintenanceModeScreen,
-  JoinUsScreen
 };

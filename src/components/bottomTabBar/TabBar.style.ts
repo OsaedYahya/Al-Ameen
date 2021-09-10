@@ -44,6 +44,14 @@ const styles = (theme: ReactNativePaper.Theme): style =>
       backgroundColor: theme.colors.primary,
       borderRadius: 10
     },
+    bottomSlider: {
+      height: 3,
+      position: "absolute",
+      bottom: 0,
+      left: 10,
+      backgroundColor: theme.colors.primary,
+      borderRadius: 10
+    },
     buttonsContainer: {
       marginTop: 4,
       flexDirection: "row",

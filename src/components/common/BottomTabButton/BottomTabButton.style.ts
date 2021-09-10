@@ -11,10 +11,12 @@ const bottomTabButtonStyle = (theme: ReactNativePaper.Theme): style =>
     labelFocused: {
       fontSize: 12,
       color: theme.colors.primary,
+      lineHeight: 20,
       fontFamily: theme.fonts.regular.fontFamily
     },
     labelUnfocused: {
       fontSize: 12,
+      lineHeight: 20,
       color: theme.colors.gray,
       fontFamily: theme.fonts.regular.fontFamily
     },
@@ -25,6 +27,8 @@ const bottomTabButtonStyle = (theme: ReactNativePaper.Theme): style =>
       height: "100%"
     },
     container: {
+      width: "100%",
+      height: "100%",
       alignItems: "center",
       justifyContent: "center"
     }

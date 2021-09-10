@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.safarway">
+  package="com.tawaan">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -9,20 +14,20 @@
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
+      android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustResize"
         android:exported="true"
         >
           <intent-filter>
               <action android:name="android.intent.action.VIEW" />
               <category android:name="android.intent.category.BROWSABLE" />
               <category android:name="android.intent.category.DEFAULT" />
-              <data android:scheme="safarway" />
+              <data android:scheme="tawaan" />
           </intent-filter>
       </activity>
 
@@ -30,12 +35,16 @@
       <activity
         android:name="com.zoontek.rnbootsplash.RNBootSplashActivity"
         android:theme="@style/BootTheme"
-        android:launchMode="singleTask">
+        android:launchMode="singleTask"
+        android:exported="true">
         <intent-filter>
           <action android:name="android.intent.action.MAIN" />
           <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAr8MvIqI5U4M3KdtfqtypexiMaMQbngF4" />
 
     </application>
 </manifest>

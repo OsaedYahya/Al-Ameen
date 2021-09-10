@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { Platform, SafeAreaView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
+import RNBootSplash from "react-native-bootsplash";
 import DeviceInfo from "react-native-device-info";
 import { NetworkConsumer } from "react-native-offline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { RouterProps } from "./Router.types";
 
@@ -17,54 +18,34 @@ import {
 } from "./";
 
 import SplashScreen from "~/components/splashScreen";
-import { FETCH_CACHE_TIME } from "~/constants/";
+import { FETCH_CACHE_TIME, USER_ID } from "~/constants/";
 import { AxiosInterceptor } from "~/containers/";
+import { setUser } from "~/redux/reducers/auth.reducer";
 import { RootState } from "~/redux/store";
 import {
-  initializeSentry,
   fetchAllRemoteConfig,
   setRemoteConfigSettings,
-  setRemoteConfigDefaults
+  setRemoteConfigDefaults,
+  retrieveItem
 } from "~/services/";
 import { compareVersions, logError } from "~/utils/";
 
 const Router = ({ theme }: RouterProps): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isForceUpdate, setIsForceUpdate] = useState(false);
-
-  const { isUnderMaintainance, userToken } = useSelector(
-    (state: RootState) => state.auth
-  );
-
+  const [id, setID] = useState();
+  const dispatch = useDispatch();
   useEffect(() => {
     const initializeSafarway = async () => {
       try {
-        await initializeSentry();
-        await setRemoteConfigSettings({
-          minimumFetchIntervalMillis: FETCH_CACHE_TIME
-        });
-        await setRemoteConfigDefaults({
-          shouldForceCodePush: false
-        });
-        const allRemoteConfigValues = await fetchAllRemoteConfig();
-        const { shouldForceCodePush, minimumForceUpdate } = allRemoteConfigValues || {};
-
-        /** must be handled later */
-        // if (shouldForceCodePush.asBoolean()) {
-        // 	checkCodePush(false);
-        // }
-
-        const forceUpdateValStr = minimumForceUpdate.asString();
-
-        const forceUpdatePlatforms = JSON.parse(forceUpdateValStr);
-        const { version, build, enabled } = forceUpdatePlatforms[Platform.OS];
-        if (!enabled) {
-          return;
-        }
-
-        const validVersion = compareVersions(version, DeviceInfo.getVersion());
-        const validBuildNumber = build > DeviceInfo.getBuildNumber();
-        setIsForceUpdate(validVersion || validBuildNumber);
+        const x = await retrieveItem(USER_ID);
+        setID(x);
+        dispatch(
+          setUser({
+            userToken: x
+          })
+        );
+        RNBootSplash.hide({ fade: true });
+        setIsLoading(false);
       } catch (error) {
         logError(error);
       } finally {
@@ -74,34 +55,17 @@ const Router = ({ theme }: RouterProps): JSX.Element => {
         }, 3000);
       }
     };
-
     initializeSafarway();
   }, []);
 
   return (
     <NavigationContainer theme={theme}>
       <AxiosInterceptor />
-      {isLoading ? (
-        <SplashScreen isLoading={isLoading} />
-      ) : (
-        <NetworkConsumer>
-          {({ isConnected }) =>
-            isConnected ? (
-              isForceUpdate ? (
-                <ForceUpdateStack />
-              ) : isUnderMaintainance ? (
-                <MaintenanceStack />
-              ) : userToken ? (
-                <AppStack />
-              ) : (
-                <AuthStack />
-              )
-            ) : (
-              <OfflineStack />
-            )
-          }
-        </NetworkConsumer>
-      )}
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        {isLoading ? (
+          <SplashScreen isLoading={isLoading} />
+        ) : <AuthStack initial={!id && "Login"} />}
+      </SafeAreaView>
     </NavigationContainer>
   );
 };

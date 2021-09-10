@@ -21,4 +21,5 @@ export interface AuthInterface {
   isUnderMaintainance?: boolean;
   isUnderForceUpgrade?: boolean;
   user: UserProfile | undefined;
+  userID?: string;
 }

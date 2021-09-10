@@ -11,8 +11,8 @@ const LightTheme = {
   // Specify custom property in nested object
   colors: {
     ...DefaultTheme.colors,
-    primary: "#5EC3ED",
-    accent: "#f1c40f",
+    primary: "#b12635",
+    accent: "#950716",
     gray: "#888888",
     malibu: "#95E3F8",
     pictonBlue: "#5CC3EE",
@@ -30,9 +30,9 @@ const DarkTheme = {
   // Specify custom property in nested object
   colors: {
     ...DefaultTheme.colors,
-    primary: "#338FCC",
+    primary: "#7f0817",
     background: "#1C1C21",
-    accent: "#00c40f",
+    accent: "#b12635",
     gray: "#888888",
     malibu: "#4acff3",
     pictonBlue: "#20ade7",

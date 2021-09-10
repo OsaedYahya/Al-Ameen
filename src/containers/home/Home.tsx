@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
-import { ScrollView, StyleSheet, SafeAreaView } from "react-native";
+import React from "react";
+import { ScrollView, StyleSheet, SafeAreaView, View } from "react-native";
 
-import Config from "react-native-config";
-import { Button } from "react-native-paper";
-import { Text, useTheme } from "react-native-paper";
-import AIcon from "react-native-vector-icons/AntDesign";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { Button, Card, TouchableRipple } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 
 import { SafIcon } from "~/components/common";
-import { AppDispatch } from "~/redux/store";
+import {deleteItem} from "~/services/";
+import {USER_ID} from "~/constants/";
 
 const Home = ({ navigation }) => {
   const { colors } = useTheme();
@@ -17,36 +15,94 @@ const Home = ({ navigation }) => {
   const backgroundStyle = {
     backgroundColor: colors.background
   };
-  const dispatch: AppDispatch = useDispatch();
+  const { t } = useTranslation();
 
   return (
     <SafeAreaView style={styles.containerStyles}>
       <ScrollView
+        contentContainerStyle={{ flex: 1 }}
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.containerStyles, backgroundStyle]}
       >
-        <Icon name="rocket" size={30} color="#900" />
-        <AIcon name="shrink" size={30} color="#900" />
-        <SafIcon
-          name="traveller_header_badge"
-          width={50}
-          height={50}
-          style={{ aspectRatio: 3 / 2 }}
-        />
-
-        <Button
-          icon="camera"
-          mode="contained"
-          onPress={() => navigation.navigate("PointsBank")}
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-evenly"
+          }}
         >
-          Points Bank
-        </Button>
+          <TouchableRipple
+            style={{
+              width: "45%"
+            }}
+            onPress={() => navigation.navigate("OrdersScreen")}
+          >
+            <Card
+              style={{
+                justifyContent: "center",
+                backgroundColor: colors.primary,
+                paddingVertical: 50
+              }}
+            >
+              <View
+                style={{
+                  borderRadius: 50,
+                  backgroundColor: "white",
+                  padding: 5,
+                  height: 60,
+                  width: 60,
+                  alignSelf: "center"
+                }}
+              >
+                <SafIcon name="clipboard" width={"100%"} height={50} />
+              </View>
+              <Button labelStyle={{ color: colors.background }} mode="borderless">
+                {t("orders")}
+              </Button>
+            </Card>
+          </TouchableRipple>
 
-        <Text>API_HOST = {Config.API_HOST}</Text>
+          <TouchableRipple
+            style={{
+              width: "45%"
+            }}
+            onPress={() => navigation.navigate("ProjectsScreen")}
+          >
+            <Card
+              style={{
+                justifyContent: "center",
+                backgroundColor: colors.primary,
+                paddingVertical: 50
+              }}
+            >
+              <View
+                style={{
+                  borderRadius: 50,
+                  backgroundColor: "white",
+                  padding: 5,
+                  height: 60,
+                  width: 60,
+                  alignSelf: "center"
+                }}
+              >
+                <SafIcon name="prototype" width={"100%"} height={50} />
+              </View>
+              <Button labelStyle={{ color: colors.background }} mode="borderless">
+                {t("projects")}
+              </Button>
+            </Card>
+          </TouchableRipple>
+        </View>
 
-        <Button mode="contained" onPress={() => navigation.navigate("Login")}>
-          Login
-        </Button>
+        {/*<Button
+          labelStyle={{ color: colors.background }}
+          style={{ marginVertical: 30 }}
+          mode="contained"
+          onPress={() => navigation.navigate("EvaluationPage")}
+        >
+          {t("EvaluationPage")}
+        </Button>*/}
       </ScrollView>
     </SafeAreaView>
   );

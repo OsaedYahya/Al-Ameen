@@ -134,14 +134,14 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.safarway"
+        applicationId "com.tawaan"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "6.0.0"
+        versionName "0.0.1"
         // Enabling multidex support.
         multiDexEnabled true
-        resValue "string", "build_config_package", "com.safarway"
+        resValue "string", "build_config_package", "com.tawaan"
     }
     splits {
         abi {
@@ -176,7 +176,7 @@ android {
             signingConfig signingConfigs.debug
             applicationIdSuffix ".dev"
             // resValue "string", "CodePushDeploymentKey", '""'
-            resValue "string", "app_name", "SafarWay-Dev"
+            resValue "string", "app_name", "Tawaan-Dev"
         }
         release {
             applicationIdSuffix ".app"
@@ -188,14 +188,14 @@ android {
             // }
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             // resValue "string", "CodePushDeploymentKey", '"mkhpxEgzZ2GmMHO7EH2968MxQXlAhIMlUypWe"'
-            resValue "string", "app_name", "SafarWay"
+            resValue "string", "app_name", "Tawaan"
         }
         stage {
             initWith release
             signingConfig signingConfigs.stage
             matchingFallbacks = ['release']
             // resValue "string", "CodePushDeploymentKey", '"SwV545o0A-pu98T_L4DTJ9fqC7cwRSe2GTBM-"'
-            resValue "string", "app_name", "SafarWay-Stage"
+            resValue "string", "app_name", "Tawaan-Stage"
         }
     }
 

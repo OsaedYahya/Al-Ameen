@@ -18,7 +18,7 @@ import LOTTIE from "~/assets/lottie/";
 import { RootState } from "~/redux/store";
 import { verticalScale } from "~/utils/responsivityUtil";
 
-const bootSplashLogo = require("~/assets/bootsplash/bootsplash_logo.png");
+const bootSplashLogo = require("~/assets/images/logo.png");
 
 const SplashScreen = (props: SplashScreenProps) => {
   const { isLoading } = props;
@@ -62,7 +62,11 @@ const SplashScreen = (props: SplashScreenProps) => {
 
   return (
     <View style={backgroundStyle}>
-      <Animated.Image style={animatedImageStyle} source={bootSplashLogo} />
+      <Animated.Image
+        resizeMode={"contain"}
+        style={animatedImageStyle}
+        source={bootSplashLogo}
+      />
       {showLottie && (
         <View style={loaderWrapperStyle}>
           <LottieView source={LOTTIE.safarway_loading} autoPlay loop />

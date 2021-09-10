@@ -120,6 +120,7 @@
 		55184AC985004ADDB35C4F47 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8434383326CE7752001D4AA2 /* Firebase */,
 				7EA1034CAED645EBB5C2B500 /* din_next_bold.ttf */,
 				7ABA0C9417824E0D9EEA66C8 /* din_next_light.ttf */,
 				E65E07DE8F554634A586FA2F /* din_next_medium.ttf */,
@@ -137,7 +138,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				8434383326CE7752001D4AA2 /* Firebase */,
 				848C3A0226B82C6C00C2FED5 /* Config.xcconfig */,
 				13B07FAE1A68108700A75B9A /* SafarWay */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -594,7 +594,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.0.0;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -623,7 +623,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.0.0;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -838,7 +838,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.0.0;
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
