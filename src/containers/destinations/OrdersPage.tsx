@@ -1,9 +1,17 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import { DataTable, Text } from "react-native-paper";
+import { DataTable, Searchbar, Text } from "react-native-paper";
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useDerivedValue,
+  withTiming
+} from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import DataTableTitle from "~/containers/destinations/DataTableTitle";
 import ordersPageStyle from "~/containers/destinations/OrdersPage.style";
@@ -11,6 +19,26 @@ import { ArrowTheme } from "~/theme/theme";
 
 const OrdersPage = () => {
   const { t } = useTranslation();
+  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const grow = useDerivedValue(() => {
+    return isExpanded
+      ? withTiming(1, {
+          duration: 200
+        })
+      : withTiming(0, {
+          duration: 200
+        });
+  });
+  const animatedStyles = useAnimatedStyle(() => {
+    const width = interpolate(grow.value, [0, 1], [50, 300]);
+
+    return {
+      width
+    };
+  });
+
   const [data, setData] = useState([
     { id: 1, name: "Hey", type: "طارىء", date: "21/12/1996" },
     { id: 2, name: "askdmas", type: "طارىء", date: "21/12/1996" },
@@ -36,6 +64,7 @@ const OrdersPage = () => {
     { id: 22, name: "Hey", type: "طارىء", date: "21/12/2022" },
     { id: 23, name: "Hey", type: "طارىء", date: "21/12/2021" }
   ]);
+  const [searchData, setSearchData] = useState([]);
   const { flex1, flex2, containerStyle, headerTextStyle, rowReverse } = ordersPageStyle;
   const [sortDirections, setSortDirections] = useState<{
     sortDirection1: undefined | "ascending" | "descending";
@@ -50,12 +79,22 @@ const OrdersPage = () => {
   });
   const renderItem = ({ item, index }: { item; index: number }) => {
     return (
-      <DataTable.Row style={{ paddingHorizontal: 8 }} key={item}>
-        <DataTable.Cell style={flex1}><Text style={{fontSize: 12}}>{item.id}</Text></DataTable.Cell>
-        <DataTable.Cell style={flex2}><Text style={{fontSize: 12}}>{item.name}</Text></DataTable.Cell>
-        <DataTable.Cell style={flex1}><Text style={{fontSize: 12}}>{item.type}</Text></DataTable.Cell>
-        <DataTable.Cell style={flex1}><Text style={{fontSize: 12}}>{item.date}</Text></DataTable.Cell>
-      </DataTable.Row>
+      <TouchableOpacity key={item}>
+        <DataTable.Row style={{ paddingHorizontal: 8 }}>
+          <DataTable.Cell style={flex1}>
+            <Text style={{ fontSize: 12 }}>{item.id}</Text>
+          </DataTable.Cell>
+          <DataTable.Cell style={flex2}>
+            <Text style={{ fontSize: 12 }}>{item.name}</Text>
+          </DataTable.Cell>
+          <DataTable.Cell style={flex1}>
+            <Text style={{ fontSize: 12 }}>{item.type}</Text>
+          </DataTable.Cell>
+          <DataTable.Cell style={flex1}>
+            <Text style={{ fontSize: 12 }}>{item.date}</Text>
+          </DataTable.Cell>
+        </DataTable.Row>
+      </TouchableOpacity>
     );
   };
 
@@ -112,8 +151,55 @@ const OrdersPage = () => {
     setSortDirections(x);
   };
 
+  const [searchQuery, setSearchQuery] = React.useState("");
+
+  const onChangeSearch = query => {
+    setSearchQuery(query);
+    setSearchData(data.filter(item => item.name.toLowerCase().startsWith(query.toLowerCase())));
+  };
+
   return (
     <View style={flex1}>
+      <View
+        style={{
+          marginStart: 5,
+          flexDirection: "row",
+          marginBottom: 8,
+          alignItems: "center",
+          marginTop: insets.top
+        }}
+      >
+        <Animated.View style={[{ zIndex: 10 }, animatedStyles]}>
+          <Searchbar
+            onIconPress={() => {
+              setIsExpanded(!isExpanded);
+            }}
+            icon={isExpanded ? "arrow-right" : "magnify"}
+            onChangeText={onChangeSearch}
+            value={searchQuery}
+            style={[
+              {
+                height: 40,
+                zIndex: 10,
+                width: "100%",
+                backgroundColor: isExpanded ? "white" : "transparent"
+              }
+            ]}
+          />
+        </Animated.View>
+        <Text
+          style={{
+            marginHorizontal: 10,
+            flex: 1,
+            zIndex: 2,
+            textAlign: "center",
+            marginStart: !isExpanded ? -50 : 0
+          }}
+        >
+          {t("orders")}
+        </Text>
+      </View>
+
       <DataTable.Header style={containerStyle}>
         <TouchableOpacity
           activeOpacity={1}
@@ -168,7 +254,10 @@ const OrdersPage = () => {
           </DataTableTitle>
         </TouchableOpacity>
       </DataTable.Header>
-      <FlatList data={data} renderItem={renderItem} />
+      <FlatList
+        data={searchQuery.length > 0 ? searchData : data}
+        renderItem={renderItem}
+      />
     </View>
   );
 };

@@ -14,6 +14,7 @@ export default {
     plan: "Flights",
     planG: "Flights",
     hotel: "Hotels",
+    orders: "Orders",
     hotelG: "Hotels",
     guide: "Tours",
     visa: "Visa",

@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, View } from "react-native";
 
 import {
   createBottomTabNavigator,
@@ -7,7 +7,7 @@ import {
   BottomTabBarProps
 } from "@react-navigation/bottom-tabs";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "react-native-paper";
+import { Searchbar, useTheme } from "react-native-paper";
 import { useSelector } from "react-redux";
 
 import { TabBar } from "~/components/bottomTabBar/TabBar";
@@ -25,7 +25,8 @@ import { moderateScale } from "~/utils/responsivityUtil";
 
 const Footer = (): JSX.Element => {
   const Tab = createBottomTabNavigator();
-  const { colors } = useTheme();
+  const theme = useTheme();
+  const { colors } = theme;
   const { t } = useTranslation();
   const { isThemeDark } = useSelector((state: RootState) => state.settings);
   const { user: { givenName = "" } = {}, userToken } =
@@ -87,6 +88,7 @@ const Footer = (): JSX.Element => {
       <Tab.Navigator
         tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}
         screenOptions={() => ({
+          headerTitleStyle: { fontFamily: theme.fonts.regular.fontFamily },
           tabBarColor: "transparent",
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.text,
@@ -107,8 +109,9 @@ const Footer = (): JSX.Element => {
           name="Destinations"
           component={OrdersPage}
           options={{
-            tabBarLabel: t("destinations"),
-            tabBarIcon: renderDestinationIcon
+            header: () => <></>,
+            tabBarLabel: t("orders"),
+            tabBarIcon: renderDestinationIcon,
           }}
         />
         <Tab.Screen

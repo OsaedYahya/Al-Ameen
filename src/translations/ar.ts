@@ -70,6 +70,7 @@ export default {
     nameOfOrderIssuer: "أسم مقدم الطلب",
     typeOfOrder: "نوع التدخل",
     dateOfOrder: "تاريخ الطلب",
+    orders: "الطلبات",
 
     next: "التالي",
     createNewUser: "انشاء حساب جديد",
