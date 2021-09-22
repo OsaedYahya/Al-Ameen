@@ -46,15 +46,15 @@ const ProvidersContainer = (): JSX.Element => {
         await i18n.changeLanguage(savedLanguage);
       } else {
         // default language values
-        I18nManager.allowRTL(true);
-        I18nManager.forceRTL(true);
+        I18nManager.allowRTL(false);
+        I18nManager.forceRTL(false);
 
-        await i18n.changeLanguage("ar");
+        await i18n.changeLanguage("en");
         const isFirstRestart = await retrieveItem(FIRST_RESTART_FLAG);
         if (!I18nManager.isRTL && !isFirstRestart) {
           // default language values
-          I18nManager.allowRTL(true);
-          I18nManager.forceRTL(true);
+          I18nManager.allowRTL(false);
+          I18nManager.forceRTL(false);
           // here we save a flag and do one restart only to force RTL
           await storeItem(FIRST_RESTART_FLAG, "1");
           RNRestart.Restart();

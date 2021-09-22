@@ -43,15 +43,11 @@ const Settings = (): JSX.Element => {
 
   return (
     <View>
-      <Text>Settings</Text>
-
-      <Text>dark</Text>
+      <Text>{t("dark_mode")}</Text>
       <Switch value={isDarkModeSwitchOn} onValueChange={onToggleDarkModeSwitch} />
 
-      <Text>language Arabic</Text>
+      <Text>{t("change_language")}</Text>
       <Switch value={isLanguageSwitchOn} onValueChange={onToggleLanguageSwitch} />
-
-      <Text>{t("main")}</Text>
     </View>
   );
 };

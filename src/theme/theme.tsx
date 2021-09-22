@@ -31,7 +31,7 @@ const DarkTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: "#338FCC",
-    background: "#1C1C21",
+    background: "#fff",
     accent: "#00c40f",
     gray: "#888888",
     malibu: "#4acff3",

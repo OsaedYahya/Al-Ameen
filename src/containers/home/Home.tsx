@@ -1,15 +1,20 @@
-import React, { useContext } from "react";
-import { ScrollView, StyleSheet, SafeAreaView } from "react-native";
+import React, {useEffect} from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  View,
+  ImageBackground,
+  Dimensions
+} from "react-native";
 
-import Config from "react-native-config";
-import { Button } from "react-native-paper";
-import { Text, useTheme } from "react-native-paper";
-import AIcon from "react-native-vector-icons/AntDesign";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { Button, Card, TouchableRipple } from "react-native-paper";
+import { useTheme } from "react-native-paper";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { SafIcon } from "~/components/common";
-import { AppDispatch } from "~/redux/store";
+import NfcManager, {NfcEvents} from "react-native-nfc-manager";
 
 const Home = ({ navigation }) => {
   const { colors } = useTheme();
@@ -17,38 +22,54 @@ const Home = ({ navigation }) => {
   const backgroundStyle = {
     backgroundColor: colors.background
   };
-  const dispatch: AppDispatch = useDispatch();
+  const { t } = useTranslation();
+  NfcManager.start();
 
+  useEffect(() => {
+
+    const cleanUp = () => {
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
+      NfcManager.setEventListener(NfcEvents.SessionClosed, null);
+    };
+
+    return new Promise(resolve => {
+      let tagFound = null;
+
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
+        tagFound = tag;
+        resolve(tagFound);
+        navigation.navigate('Login', {
+          user: {
+            phone: tag,
+            name: tag,
+          }
+        })
+        NfcManager.unregisterTagEvent().catch(() => 0);
+      });
+
+      NfcManager.setEventListener(NfcEvents.SessionClosed, () => {
+        cleanUp();
+        if (!tagFound) {
+          resolve();
+        }
+      });
+
+      NfcManager.registerTagEvent();
+    });
+  }, []);
   return (
-    <SafeAreaView style={styles.containerStyles}>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={[styles.containerStyles, backgroundStyle]}
+    <ImageBackground
+      source={require("./../../assets/images/bg.png")}
+      style={styles.containerStyles}
+      resizeMode={"contain"}
+    >
+      <TouchableRipple
+        style={{ height: 50, width: 50 }}
+        onPress={() => navigation.navigate("Login")}
       >
-        <Icon name="rocket" size={30} color="#900" />
-        <AIcon name="shrink" size={30} color="#900" />
-        <SafIcon
-          name="traveller_header_badge"
-          width={50}
-          height={50}
-          style={{ aspectRatio: 3 / 2 }}
-        />
-
-        <Button
-          icon="camera"
-          mode="contained"
-          onPress={() => navigation.navigate("PointsBank")}
-        >
-          Points Bank
-        </Button>
-
-        <Text>API_HOST = {Config.API_HOST}</Text>
-
-        <Button mode="contained" onPress={() => navigation.navigate("Login")}>
-          Login
-        </Button>
-      </ScrollView>
-    </SafeAreaView>
+        <View />
+      </TouchableRipple>
+    </ImageBackground>
   );
 };
 
@@ -56,6 +77,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   containerStyles: {
-    flex: 1
+    height: "100%",
+    backgroundColor: "white"
   }
 });

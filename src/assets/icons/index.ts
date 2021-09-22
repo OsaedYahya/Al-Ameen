@@ -8,7 +8,9 @@ const ICONS: GenericObject = {
   user_placeholder: require("./user_profile_default.svg").default,
   add_post_nav: require("./add_post_nav.svg").default,
   safarway_logo: require("./sw_logo.svg").default,
-  maintenance_mode: require("./maintenance.svg").default
+  maintenance_mode: require("./maintenance.svg").default,
+  clipboard: require("./clipboard.svg").default,
+  prototype: require("./prototype.svg").default
 };
 
 export default ICONS;

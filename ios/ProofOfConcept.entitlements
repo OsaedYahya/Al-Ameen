@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+        <string>www.yellowpages.com.ps</string>
+        <string>http://www.yellowpages.com.ps</string>
+        <string>https://www.yellowpages.com.ps</string>
+        <string>https://yellowpages.com.ps</string>
+        <string>http://yellowpages.com.ps</string>
+	</array>
+</dict>
+</plist>

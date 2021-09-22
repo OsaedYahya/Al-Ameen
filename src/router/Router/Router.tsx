@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { Platform, SafeAreaView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import DeviceInfo from "react-native-device-info";
@@ -21,7 +21,6 @@ import { FETCH_CACHE_TIME } from "~/constants/";
 import { AxiosInterceptor } from "~/containers/";
 import { RootState } from "~/redux/store";
 import {
-  initializeSentry,
   fetchAllRemoteConfig,
   setRemoteConfigSettings,
   setRemoteConfigDefaults
@@ -39,7 +38,6 @@ const Router = ({ theme }: RouterProps): JSX.Element => {
   useEffect(() => {
     const initializeSafarway = async () => {
       try {
-        await initializeSentry();
         await setRemoteConfigSettings({
           minimumFetchIntervalMillis: FETCH_CACHE_TIME
         });
@@ -74,34 +72,35 @@ const Router = ({ theme }: RouterProps): JSX.Element => {
         }, 3000);
       }
     };
-
     initializeSafarway();
   }, []);
 
   return (
     <NavigationContainer theme={theme}>
       <AxiosInterceptor />
-      {isLoading ? (
-        <SplashScreen isLoading={isLoading} />
-      ) : (
-        <NetworkConsumer>
-          {({ isConnected }) =>
-            isConnected ? (
-              isForceUpdate ? (
-                <ForceUpdateStack />
-              ) : isUnderMaintainance ? (
-                <MaintenanceStack />
-              ) : userToken ? (
-                <AppStack />
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        {isLoading ? (
+          <SplashScreen isLoading={isLoading} />
+        ) : (
+          <NetworkConsumer>
+            {({ isConnected }) =>
+              true ? (
+                isForceUpdate ? (
+                  <ForceUpdateStack />
+                ) : isUnderMaintainance ? (
+                  <MaintenanceStack />
+                ) : userToken ? (
+                  <AppStack />
+                ) : (
+                  <AuthStack />
+                )
               ) : (
-                <AuthStack />
+                <OfflineStack />
               )
-            ) : (
-              <OfflineStack />
-            )
-          }
-        </NetworkConsumer>
-      )}
+            }
+          </NetworkConsumer>
+        )}
+      </SafeAreaView>
     </NavigationContainer>
   );
 };

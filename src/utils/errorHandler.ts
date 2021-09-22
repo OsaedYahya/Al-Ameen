@@ -1,16 +1,14 @@
-import * as Sentry from "@sentry/react-native";
 import Config from "react-native-config";
 
 import { showAlert } from "~/components/";
 import { BAD_GATEWAY_ERROR, SERVICE_UNAVAILABLE_ERROR } from "~/constants/errorCodes";
-import { i18n } from "~/translations";
+import { i18n } from "~/translations/";
 
 export const generalErrorHandler = (
   error: any,
   errorTitle: string = i18n.t("something_went_wrong"),
   errorMsg = `${i18n.t("please_try_again_or_contact")} ${Config.CONTACT_SUPPORT}`
 ): void => {
-  Sentry.captureException(error);
   if (
     error.response &&
     error.response.status !== BAD_GATEWAY_ERROR &&
@@ -21,5 +19,4 @@ export const generalErrorHandler = (
 };
 
 export const logError = (error: string): void => {
-  Sentry.captureException(error);
 };

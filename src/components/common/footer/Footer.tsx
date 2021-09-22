@@ -22,6 +22,8 @@ import {
 } from "~/containers/";
 import { RootState } from "~/redux/store";
 import { moderateScale } from "~/utils/responsivityUtil";
+import ProjectsPage from "~/containers/projectsPage";
+import {LightTheme} from "~/theme/";
 
 const Footer = (): JSX.Element => {
   const Tab = createBottomTabNavigator();
@@ -101,41 +103,9 @@ const Footer = (): JSX.Element => {
           name="Home"
           component={HomeScreen}
           options={{
+            headerTitle: t("main"),
             tabBarLabel: t("main"),
             tabBarIcon: renderHomeIcon
-          }}
-        />
-        <Tab.Screen
-          name="Destinations"
-          component={OrdersPage}
-          options={{
-            header: () => <></>,
-            tabBarLabel: t("orders"),
-            tabBarIcon: renderDestinationIcon,
-          }}
-        />
-        <Tab.Screen
-          name="AddPost"
-          component={isLoggedIn ? AddPostScreen : JoinUsScreen}
-          options={{
-            tabBarLabel: "",
-            tabBarIcon: renderAddPostIcon
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={isLoggedIn ? ProfileScreen : JoinUsScreen}
-          options={{
-            tabBarLabel: `\u200F${givenName}`,
-            tabBarIcon: renderUserIcon
-          }}
-        />
-        <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
-          options={{
-            tabBarLabel: t("more"),
-            tabBarIcon: renderMoreIcon
           }}
         />
       </Tab.Navigator>
