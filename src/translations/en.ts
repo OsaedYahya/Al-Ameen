@@ -101,6 +101,8 @@ export default {
     describe_issues: "Describe the symptoms of the defect",
     infrastructure: "Infrastructure networks",
     water: "Water network",
+    WaterProblemsMentionedByTheBeneficiary: "Water problems mentioned by the beneficiary",
+    TheVisionOfTheBeneficiariesOfTheRequiredWork: "The Vision Of The Beneficiaries Of The Required Work",
     sewerage: "Sewage network",
     electricity: "The electricity grid",
     specific_issues: "Specific problems mentioned by the beneficiary",

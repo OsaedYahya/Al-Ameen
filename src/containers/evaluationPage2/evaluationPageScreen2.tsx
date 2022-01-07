@@ -19,18 +19,31 @@ const EvaluationPageScreen2 = () => {
   const dispatch = useDispatch();
   const { pageTwo } = useSelector((state: RootState) => state.pages);
   const { params } = useRoute();
-  const [anotherIncome, setAnotherIncome] = useState("");
-  const [location, setLocation] = useState("");
-  const [benefactors, setBenefactors] = useState("");
-  const [residentsAbove18Male, setResidentsAbove18Male] = useState("");
-  const [residentsAbove18Female, setResidentsAbove18Female] = useState("");
-  const [residentsUnder18Male, setResidentsUnder18Male] = useState("");
-  const [residentsUnder18Female, setResidentsUnder18Female] = useState("");
-  const [residentsWithSpecialNeedsMale, setResidentsWithSpecialNeedsMale] = useState("");
+  const { order } = params;
+  const currentForm = order?.EvaluationForm || {};
+
+
+  const {
+    IsThereAnyOtherIncome = "",
+    LocationSensitivity = "",
+    TheBeneficiary = "",
+    NumberOfPeopleOver18YearsOld = "",
+    NumberOfPeopleUnder18YearsOld = "",
+    NumberOfPeopleWithChronicDiseases = "",
+    HasThePropertyBeenPreviouslyRenovated = "",
+  } = currentForm;
+
+  const [anotherIncome, setAnotherIncome] = useState(IsThereAnyOtherIncome);
+  const [location, setLocation] = useState(LocationSensitivity);
+  const [benefactors, setBenefactors] = useState(TheBeneficiary);
+  const [residentsAbove18Male, setResidentsAbove18Male] = useState(NumberOfPeopleOver18YearsOld);
+  const [residentsAbove18Female, setResidentsAbove18Female] = useState(NumberOfPeopleOver18YearsOld);
+  const [residentsUnder18Male, setResidentsUnder18Male] = useState(NumberOfPeopleUnder18YearsOld);
+  const [residentsUnder18Female, setResidentsUnder18Female] = useState(NumberOfPeopleUnder18YearsOld);
+  const [residentsWithSpecialNeedsMale, setResidentsWithSpecialNeedsMale] = useState(NumberOfPeopleWithChronicDiseases);
   const [residentsWithSpecialNeedsFemale, setResidentsWithSpecialNeedsFemale] =
-    useState("");
-  const [benefactorsForJob, setBenefactorsForJob] = useState("");
-  const [houseWasRenovated, setHouseWasRenovated] = useState("");
+    useState(NumberOfPeopleWithChronicDiseases);
+  const [houseWasRenovated, setHouseWasRenovated] = useState(HasThePropertyBeenPreviouslyRenovated);
   const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
 
@@ -45,7 +58,6 @@ const EvaluationPageScreen2 = () => {
       residentsUnder18Female !== "" &&
       residentsWithSpecialNeedsMale !== "" &&
       residentsWithSpecialNeedsFemale !== "" &&
-      benefactorsForJob !== "" &&
       houseWasRenovated !== ""
     ) {
       if (pageTwo !== 2)
@@ -64,7 +76,6 @@ const EvaluationPageScreen2 = () => {
       residentsUnder18Female === "" &&
       residentsWithSpecialNeedsMale === "" &&
       residentsWithSpecialNeedsFemale === "" &&
-      benefactorsForJob === "" &&
       houseWasRenovated === ""
     ) {
       if (pageTwo !== 0)
@@ -98,7 +109,6 @@ const EvaluationPageScreen2 = () => {
   }, [
     anotherIncome,
     benefactors,
-    benefactorsForJob,
     dispatch,
     houseWasRenovated,
     location,
@@ -123,12 +133,12 @@ const EvaluationPageScreen2 = () => {
     >
       <ScrollView keyboardShouldPersistTaps={"never"} style={{ flex: 1 }}>
         <Text>{t("another_income")}</Text>
-        <RadioGroup onToggle={setAnotherIncome}>
+        <RadioGroup defaultValue={anotherIncome} onToggle={setAnotherIncome}>
           <RadioButton label={t("Yes")} value={"true"} />
           <RadioButton label={t("No")} value={"false"} />
         </RadioGroup>
         <Text>{t("location")}</Text>
-        <RadioGroup onToggle={setLocation}>
+        <RadioGroup defaultValue={location} onToggle={setLocation}>
           <RadioButton label={t("sensitive")} value={"true"} />
           <RadioButton label={t("insensitive")} value={"false"} />
         </RadioGroup>
@@ -173,14 +183,14 @@ const EvaluationPageScreen2 = () => {
           value={residentsWithSpecialNeedsFemale}
           setValue={setResidentsWithSpecialNeedsFemale}
         />
-        <TextInput
+        {/*<TextInput
           keyboardType={"numeric"}
           label={t("benefactors_for_job")}
           value={benefactorsForJob}
           setValue={setBenefactorsForJob}
-        />
+        />*/}
         <Text>{t("house_was_renovated")}</Text>
-        <RadioGroup onToggle={setHouseWasRenovated}>
+        <RadioGroup defaultValue={houseWasRenovated} onToggle={setHouseWasRenovated}>
           <RadioButton label={t("Yes")} value={"true"} />
           <RadioButton label={t("No")} value={"false"} />
         </RadioGroup>

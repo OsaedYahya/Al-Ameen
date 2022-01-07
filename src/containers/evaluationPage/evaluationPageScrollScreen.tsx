@@ -106,6 +106,9 @@ const EvaluationPageScreen = () => {
             tabBarLabel: "صفحة ٢",
             tabBarIcon: props => renderHomeIcon(props, pageTwo)
           }}
+          initialParams={{
+            order: params?.order
+          }}
           name="Settings2"
           component={EvaluationPageScreen2}
         />
@@ -113,6 +116,9 @@ const EvaluationPageScreen = () => {
           options={{
             tabBarLabel: "صفحة ٣",
             tabBarIcon: props => renderHomeIcon(props, pageThree)
+          }}
+          initialParams={{
+            order: params?.order
           }}
           name="Settings3"
           component={EvaluationPageScreen3}

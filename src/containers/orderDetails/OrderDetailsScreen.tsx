@@ -9,7 +9,7 @@ import {
   View
 } from "react-native";
 
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useRoute, useNavigation, useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import ImagePicker from "react-native-image-crop-picker";
@@ -43,7 +43,8 @@ import {
 
 const OrderDetailsScreen = () => {
   const { params } = useRoute();
-  const { order = {} } = params;
+  const { order: initialOrder = {} } = params;
+  const [order, setOrder]=  useState(initialOrder);
   const { userToken } = useSelector((state: RootState) => state.auth);
   const [images, setImages] = useState(order?.Images || []);
   const [lat, setLat] = useState(order?.Latitude || "");
@@ -52,7 +53,7 @@ const OrderDetailsScreen = () => {
     latitude: parseFloat(order?.Latitude) || 31.7683,
     longitude: parseFloat(order?.Longitude) || 35.2137
   });
-  console.log(order)
+
   const mapRef = React.createRef();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -62,16 +63,45 @@ const OrderDetailsScreen = () => {
   const navigation = useNavigation();
   const [mapModalVisible, setMapModalVisible] = useState(false);
 
+  useFocusEffect(() => {
+    getOrder()
+  })
+  const getOrder = async () => {
+    let orders = [];
+    await retrieveItem("Orders").then(res => {
+      orders = res || [];
+    });
+    const index = orders.findIndex(
+      item => item.SubscriberServiceID === order.SubscriberServiceID
+    );
+    setOrder(orders[index]);
+  };
+
   const handleSetImages = async () => {
     let orders = [];
     await retrieveItem("Orders").then(res => {
-      orders = res;
+      orders = res || [];
     });
     const index = orders.findIndex(
       item => item.SubscriberServiceID === order.SubscriberServiceID
     );
     const newOrder = order;
     newOrder.Images = images;
+    orders[index] = newOrder;
+    await storeItem("Orders", orders);
+  };
+
+  const handleSetLocation = async () => {
+    let orders = [];
+    await retrieveItem("Orders").then(res => {
+      orders = res || [];
+    });
+    const index = orders.findIndex(
+      item => item.SubscriberServiceID === order.SubscriberServiceID
+    );
+    const newOrder = order;
+    newOrder.Longitude = marker.longitude.toFixed(6);
+    newOrder.Latitude = marker.latitude.toFixed(6);
     orders[index] = newOrder;
     await storeItem("Orders", orders);
   };
@@ -195,28 +225,7 @@ const OrderDetailsScreen = () => {
             onChangeText={setLon}
           />
           <Button
-            onPress={async () => {
-              let orders = [];
-              await retrieveItem("Orders").then(res => {
-                orders = res;
-              });
-              const index = orders.findIndex(
-                item => item.SubscriberServiceID === order.SubscriberServiceID
-              );
-              const newOrder = order;
-              newOrder.Longitude = marker.longitude.toFixed(6);
-              newOrder.Latitude = marker.latitude.toFixed(6);
-              orders[index] = newOrder;
-              await storeItem("Orders", orders);
-              /*
-              applicationsAPI.setLocation(
-                order.SubscriberServiceID,
-                userToken,
-                marker.longitude.toFixed(6),
-                marker.latitude.toFixed(6)
-              );
-*/
-            }}
+            onPress={handleSetLocation}
             style={{
               alignSelf: "flex-end",
               marginTop: 12,
@@ -302,11 +311,11 @@ const OrderDetailsScreen = () => {
           style={{ borderRadius: 0 }}
           mode="contained"
           title={t("EvaluationPage")}
-          onPress={() =>
+          onPress={() => {
             navigation.navigate("EvaluationPage", {
               order
-            })
-          }
+            });
+          }}
         />
       </ScrollView>
       <Modal

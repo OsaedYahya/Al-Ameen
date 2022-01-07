@@ -36,7 +36,7 @@ const OrdersPage = () => {
   const storeOrderIfNotExist = async (data: any) => {
     let orders = [];
     await retrieveItem("Orders").then(res => {
-      orders = res;
+      orders = res || [];
     });
     const merge = (a, b, p) => a.filter(aa => !b.find(bb => aa[p] === bb[p])).concat(b);
 
@@ -93,6 +93,23 @@ const OrdersPage = () => {
     return (
       <TouchableRipple
         key={item}
+        onLongPress={() =>{
+          if(item.Latitude&&
+            item.Longitude&&
+          item.EvaluationForm&&
+          item.Images){
+            applicationsAPI.AddApplicationForm(
+              item.SubscriberServiceID,
+              item.userId,
+              item.EvaluationForm,
+              item.RoleId,
+              item.Location,
+              item.Images
+            )
+          } else {
+            alert("Enter all data")
+          }
+        }}
         onPress={() => {
           navigation.navigate("OrderDetailsScreen", {
             order: item
@@ -120,19 +137,20 @@ const OrdersPage = () => {
                 name={"location"}
                 width={18}
                 height={18}
-                style={{ color: "grey", marginVertical: 1 }}
+                style={{ color: item.Latitude && item.Longitude ? "green" : "grey", marginVertical: 1 }}
               />
               <SafIcon
                 name={"form"}
                 width={16}
                 height={16}
-                style={{ color: "green", marginVertical: 1 }}
+                style={{ color: item.EvaluationForm ? "green" : "grey", marginVertical: 1 }}
               />
+
               <SafIcon
                 name={"camera"}
                 width={16}
                 height={16}
-                style={{ color: item.HasAttachments ? "green" : "grey" }}
+                style={{ color: (item.Images || [])?.length > 0 ? "green" : "grey" }}
               />
             </View>
           </View>

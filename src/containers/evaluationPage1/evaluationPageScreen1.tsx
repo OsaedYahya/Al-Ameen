@@ -19,19 +19,34 @@ const EvaluationPageScreen1 = () => {
   const navigation = useNavigation();
 
   const { params } = useRoute();
-  const { SubscriberServiceID } = params.order;
+  const { SubscriberServiceID, RoleID, Latitude, Longitude } = params.order;
+  const { order } = params;
+  const currentForm = order?.EvaluationForm || {};
 
-  const [nameOfPropertyOwner, setNameOfPropertyOwner] = useState("");
-  const [usage, setUsage] = useState("");
-  const [address, setAddress] = useState("");
-  const [mobileNo, setMobileNo] = useState("");
-  const [generalInfo, setGeneralInfo] = useState("");
-  const [providerAge, setProviderAge] = useState("");
-  const [providerGender, setProviderGender] = useState("");
-  const [providerEducation, setProviderEducation] = useState("");
-  const [houseSize, setHouseSize] = useState("");
-  const [providerJob, setProviderJob] = useState("");
-  const [providerIncome, setProviderIncome] = useState("");
+  const {
+    NameOfTheOccupantOfTheProperty= "",
+    TheUse= "",
+    Address= "",
+    MobileNumber= "",
+    GeneralInfo= "",
+    AgeOfTheBreadwinner= "",
+    GenderOfTheBreadwinner= "",
+    EducationLevelOfTheHeadOfTheFamily= "",
+    HouseSpace= "",
+    WhatIsTheJobOfTheHeadOfTheFamilyIfHeWorks= "",
+    FamilyIncomeLevel= "",
+  } = currentForm;
+  const [nameOfPropertyOwner, setNameOfPropertyOwner] = useState(NameOfTheOccupantOfTheProperty);
+  const [usage, setUsage] = useState(TheUse);
+  const [address, setAddress] = useState(Address);
+  const [mobileNo, setMobileNo] = useState(MobileNumber);
+  const [generalInfo, setGeneralInfo] = useState(GeneralInfo);
+  const [providerAge, setProviderAge] = useState(AgeOfTheBreadwinner);
+  const [providerGender, setProviderGender] = useState(GenderOfTheBreadwinner);
+  const [providerEducation, setProviderEducation] = useState(EducationLevelOfTheHeadOfTheFamily);
+  const [houseSize, setHouseSize] = useState(HouseSpace);
+  const [providerJob, setProviderJob] = useState(WhatIsTheJobOfTheHeadOfTheFamilyIfHeWorks);
+  const [providerIncome, setProviderIncome] = useState(FamilyIncomeLevel);
   const dispatch = useDispatch();
   const { pageOne } = useSelector((state: RootState) => state.pages);
   const [showDropDown, setShowDropDown] = useState(false);
@@ -124,6 +139,11 @@ const EvaluationPageScreen1 = () => {
       setPagesObj({
         pageOne: {
           SubscriberServiceID: SubscriberServiceID,
+          RoleId: RoleID,
+          Location: {
+            Latitude,
+            Longitude
+          },
           NameOfTheOccupantOfTheProperty: nameOfPropertyOwner,
           TheUse: usage,
           Address: address,
@@ -184,8 +204,8 @@ const EvaluationPageScreen1 = () => {
         {t("provider_gender")}
       </Text>
       <RadioGroup onToggle={setProviderGender}>
-        <RadioButton label={t("male")} value={"0"} />
-        <RadioButton label={t("female")} value={"1"} />
+        <RadioButton label={t("male")} value={"1"} />
+        <RadioButton label={t("female")} value={"2"} />
       </RadioGroup>
       <DropDown
         label={t("provider_education")}

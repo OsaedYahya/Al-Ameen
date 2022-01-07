@@ -6,8 +6,8 @@ import { RadioGroupProps } from "./RadioGroup.types";
 import {View} from "react-native";
 
 const RadioGroup = (props: RadioGroupProps): JSX.Element => {
-  const { children, onToggle } = props;
-  const [isSwitchOn, setIsSwitchOn] = React.useState("first");
+  const { children, onToggle, defaultValue ="" } = props;
+  const [isSwitchOn, setIsSwitchOn] = React.useState(defaultValue);
   const onToggleSwitch = (key: string) => {
     if (onToggle) {
       onToggle(key);

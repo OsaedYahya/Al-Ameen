@@ -31,6 +31,8 @@ export default {
     female_residents_under_18: "عدد الإناث القاطنات في البيت تحت ١٨ سنة",
     male_residents_with_special_needs: "عدد الذكور ذو امراض مزمنة / احتياجات خاصة",
     female_residents_with_special_needs: "عدد الإناث ذوات امراض مزمنة / احتياجات خاصة",
+    WaterProblemsMentionedByTheBeneficiary: "مشاكل المياه التي ذكرها المستفيد",
+    TheVisionOfTheBeneficiariesOfTheRequiredWork: "رؤية المستفيدين من العمل المطلوب",
     benefactors_for_job: "عدد المستفيدين للإعمال المطلوبة",
     house_was_renovated: "هل تم ترميم العقار سابقا",
     house_was_renovated_in: "تم ترميم العقار عام",

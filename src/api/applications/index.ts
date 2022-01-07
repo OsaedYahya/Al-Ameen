@@ -23,12 +23,18 @@ const addAttachments = async (
 const AddApplicationForm = async (
   ApplicationId: string,
   userId: string,
-  EvaluationForm: {}
+  EvaluationForm: {},
+  RoleId: number | string,
+  Location: {},
+  attachments = [],
 ) => {
   return axiosInstance.post(`${APIConstants.ADD_APPLICATION_FORM}`, {
     ApplicationId,
     userId,
-    EvaluationForm
+    EvaluationForm,
+    RoleId,
+    Location,
+    attachments
   });
 };
 

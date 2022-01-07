@@ -14,6 +14,8 @@ import { RadioGroup } from "~/components/common/RadioGroup";
 import TextInput from "~/components/TextInput/TextInput";
 import { setPages } from "~/redux/reducers/pages.reducer";
 import { RootState } from "~/redux/store";
+import { retrieveItem, storeItem } from "~/services/";
+
 const houseAgeList = [
   {
     label: "اقل من 50 سنة",
@@ -29,50 +31,94 @@ const houseAgeList = [
   }
 ];
 
-const EvaluationPageScreen3 = () => {
+const EvaluationPageScreen3 = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { pageThree } = useSelector((state: RootState) => state.pages);
   const { colors } = useTheme();
   const { pageOne, pageTwo } = useSelector((state: RootState) => state.pagesObj);
+  const { order } = route.params;
+  const currentForm = order?.EvaluationForm || {};
+
+  const {
+    YearRenovation = "",
+    BuildingAge = "",
+    NumberOfBlanks = "",
+    TotalArea = "",
+    Coverage = "",
+    IsThereHumidityInTheHouse = "",
+    HumidityNotes = "",
+    AreTherePlumbingFixtures = "",
+    PlumbingNotes = "",
+    GroundDamagedCase = "",
+    DamagedPlasterCase = "",
+    TheVisionOfTheBeneficiariesOfTheRequiredWork: vision = "",
+    WhatTypeOfPlasterIsDamaged = "",
+    DamagedKohlCase = "",
+    WhatTypeOfKohlIsDamaged = "",
+    DamagedSurfaces = "",
+    DamagedSurfaceNotes = "",
+    DoorsAndWindows = "",
+    KitchenCase = "",
+    BathroomCase = "",
+    BathroomNotes = "",
+    AreThereConstructionProblems = "",
+    DescribeTheSymptomsOfTheProblem = "",
+    WaterProblemsMentionedByTheBeneficiary: waterProblems = "",
+    EffectsOfLeakageOrImminentDamageToTheNetwork = "",
+    SanitationProblemsMentionedByTheBeneficiary = "",
+    ElectricityProblemsMentionedByTheBeneficiary = "",
+    InternalAndExternalExtensions = "",
+    GeneralCaseOfTheBuilding = "",
+    AdditionalIssuesAndNotes = "",
+    ConclusionAndRecommendations = ""
+  } = currentForm;
 
   const [showDropDown, setShowDropDown] = useState(false);
-  const [houseWasRenovatedIn, setHouseWasRenovatedIn] = useState("");
-  const [houseAge, setHouseAge] = useState("");
-  const [spacesCount, setSpacesCount] = useState("");
-  const [fullSize, setFullSize] = useState("");
-  const [coveringSize, setCoveringSize] = useState("");
-  const [dilf, setDilf] = useState("");
-  const [dilfNotes, setDilfNotes] = useState("");
-  const [humidity, setHumidity] = useState("");
-  const [humidityNotes, setHumidityNotes] = useState("");
-  const [sanitaryExtensions, setSanitaryExtensions] = useState("");
-  const [sanitaryExtensionsNotes, setSanitaryExtensionsNotes] = useState("");
-  const [faultyFloorType, setFaultyFloorType] = useState("");
-  const [typeOfPlastering, setTypeOfPlastering] = useState("");
-  const [palsteringCondition, setPlasteringCondition] = useState("");
-  const [kehlaCondition, setKehlaCondition] = useState("");
-  const [typeOfKehla, setTypeOfKehla] = useState("");
-  const [faultyCeiling, setFaultyCeiling] = useState("");
-  const [faultyCeilingNotes, setFaultyCeilingNotes] = useState("");
-  const [doorsAndWindows, setDoorsAndWindows] = useState("");
-  const [kitchenCondition, setKitchenCondition] = useState("");
-  const [bathroomCondition, setBathroomCondition] = useState("");
-  const [sanitary, setSanitary] = useState("");
-  const [unsanitary, setUnsanitary] = useState("");
-  const [bathroomNotes, setBathroomNotes] = useState("");
-  const [structuralIssues, setStructuralIssues] = useState("");
-  const [describeIssues, setDescribeIssues] = useState("");
-  const [infrastructure, setInfrastructure] = useState("");
-  const [water, setWater] = useState("");
-  const [sewerage, setSewerage] = useState("");
-  const [electricity, setElectricity] = useState("");
-  const [specificIssues, setSpecificIssues] = useState("");
-  const [leakage, setLeakage] = useState("");
-  const [Extensions, setExtensions] = useState("");
-  const [generalCondition, setGeneralCondition] = useState("");
-  const [lawsuits, setLawsuits] = useState("");
-  const [recommendation, setRecommendation] = useState("");
+  const [houseWasRenovatedIn, setHouseWasRenovatedIn] = useState(YearRenovation);
+  const [houseAge, setHouseAge] = useState(BuildingAge);
+  const [spacesCount, setSpacesCount] = useState(NumberOfBlanks || "");
+  const [fullSize, setFullSize] = useState(TotalArea || "");
+  const [coveringSize, setCoveringSize] = useState(Coverage || "");
+  const [dilf, setDilf] = useState(IsThereHumidityInTheHouse || "");
+  const [dilfNotes, setDilfNotes] = useState(HumidityNotes || "");
+  const [humidity, setHumidity] = useState(IsThereHumidityInTheHouse);
+  const [humidityNotes, setHumidityNotes] = useState(HumidityNotes);
+  const [sanitaryExtensions, setSanitaryExtensions] = useState(
+    AreTherePlumbingFixtures || ""
+  );
+  const [sanitaryExtensionsNotes, setSanitaryExtensionsNotes] = useState(
+    PlumbingNotes || ""
+  );
+  const [faultyFloorType, setFaultyFloorType] = useState(GroundDamagedCase);
+  const [typeOfPlastering, setTypeOfPlastering] = useState(WhatTypeOfPlasterIsDamaged);
+  const [palsteringCondition, setPlasteringCondition] = useState(DamagedPlasterCase);
+  const [kehlaCondition, setKehlaCondition] = useState(DamagedKohlCase);
+  const [typeOfKehla, setTypeOfKehla] = useState(WhatTypeOfKohlIsDamaged);
+  const [faultyCeiling, setFaultyCeiling] = useState(DamagedSurfaces);
+  const [faultyCeilingNotes, setFaultyCeilingNotes] = useState(DamagedSurfaceNotes);
+  const [doorsAndWindows, setDoorsAndWindows] = useState(DoorsAndWindows);
+  const [kitchenCondition, setKitchenCondition] = useState(KitchenCase);
+  const [bathroomCondition, setBathroomCondition] = useState(BathroomCase);
+  const [bathroomNotes, setBathroomNotes] = useState(BathroomNotes);
+  const [structuralIssues, setStructuralIssues] = useState(AreThereConstructionProblems);
+  const [describeIssues, setDescribeIssues] = useState(DescribeTheSymptomsOfTheProblem);
+  const [sewerage, setSewerage] = useState(SanitationProblemsMentionedByTheBeneficiary);
+  const [
+    WaterProblemsMentionedByTheBeneficiary,
+    setWaterProblemsMentionedByTheBeneficiary
+  ] = useState(waterProblems);
+  const [
+    TheVisionOfTheBeneficiariesOfTheRequiredWork,
+    setTheVisionOfTheBeneficiariesOfTheRequiredWork
+  ] = useState(vision);
+  const [electricity, setElectricity] = useState(ElectricityProblemsMentionedByTheBeneficiary);
+  const [specificIssues, setSpecificIssues] = useState(AdditionalIssuesAndNotes);
+  const [leakage, setLeakage] = useState(EffectsOfLeakageOrImminentDamageToTheNetwork);
+  const [Extensions, setExtensions] = useState(InternalAndExternalExtensions);
+  const [generalCondition, setGeneralCondition] = useState(GeneralCaseOfTheBuilding);
+/*  const [lawsuits, setLawsuits] = useState("");*/
+  const [recommendation, setRecommendation] = useState(ConclusionAndRecommendations);
   const { t } = useTranslation();
   const headerHeight = useHeaderHeight();
   const { userToken } = useSelector((state: RootState) => state.auth);
@@ -100,20 +146,15 @@ const EvaluationPageScreen3 = () => {
       doorsAndWindows !== "" &&
       kitchenCondition !== "" &&
       bathroomCondition !== "" &&
-      sanitary !== "" &&
-      unsanitary !== "" &&
       bathroomNotes !== "" &&
       structuralIssues !== "" &&
       describeIssues !== "" &&
-      infrastructure !== "" &&
-      water !== "" &&
       sewerage !== "" &&
       electricity !== "" &&
       specificIssues !== "" &&
       leakage !== "" &&
       Extensions !== "" &&
       generalCondition !== "" &&
-      lawsuits !== "" &&
       recommendation !== ""
     ) {
       if (pageThree !== 2)
@@ -144,20 +185,15 @@ const EvaluationPageScreen3 = () => {
       doorsAndWindows === "" &&
       kitchenCondition === "" &&
       bathroomCondition === "" &&
-      sanitary === "" &&
-      unsanitary === "" &&
       bathroomNotes === "" &&
       structuralIssues === "" &&
       describeIssues === "" &&
-      infrastructure === "" &&
-      water === "" &&
       sewerage === "" &&
       electricity === "" &&
       specificIssues === "" &&
       leakage === "" &&
       Extensions === "" &&
       generalCondition === "" &&
-      lawsuits === "" &&
       recommendation === ""
     ) {
       if (pageThree !== 0)
@@ -196,20 +232,15 @@ const EvaluationPageScreen3 = () => {
     doorsAndWindows,
     kitchenCondition,
     bathroomCondition,
-    sanitary,
-    unsanitary,
     bathroomNotes,
     structuralIssues,
     describeIssues,
-    infrastructure,
-    water,
     sewerage,
     electricity,
     specificIssues,
     leakage,
     Extensions,
     generalCondition,
-    lawsuits,
     recommendation,
     pageThree,
     dispatch
@@ -245,6 +276,9 @@ const EvaluationPageScreen3 = () => {
               padding: 0
             }
           }}
+          dropDownItemSelectedTextStyle={{
+            color: colors.primary
+          }}
           theme={{ colors: { text: colors.text, placeholder: colors.gray } }}
           visible={showDropDown}
           showDropDown={() => setShowDropDown(true)}
@@ -266,13 +300,13 @@ const EvaluationPageScreen3 = () => {
           setValue={setCoveringSize}
         />
         <Text>{t("dilf")}</Text>
-        <RadioGroup onToggle={setDilf}>
+        <RadioGroup defaultValue={dilf} onToggle={setDilf}>
           <RadioButton label={t("Yes")} value={"true"} />
           <RadioButton label={t("No")} value={"false"} />
         </RadioGroup>
         <TextInput label={t("dilf_notes")} value={dilfNotes} setValue={setDilfNotes} />
         <Text>{t("humidity")}</Text>
-        <RadioGroup onToggle={setHumidity}>
+        <RadioGroup defaultValue={humidity} onToggle={setHumidity}>
           <RadioButton label={t("Yes")} value={"true"} />
           <RadioButton label={t("No")} value={"false"} />
         </RadioGroup>
@@ -282,7 +316,7 @@ const EvaluationPageScreen3 = () => {
           setValue={setHumidityNotes}
         />
         <Text>{t("sanitary_extensions")}</Text>
-        <RadioGroup onToggle={setSanitaryExtensions}>
+        <RadioGroup defaultValue={sanitaryExtensions} onToggle={setSanitaryExtensions}>
           <RadioButton label={t("Yes")} value={"true"} />
           <RadioButton label={t("No")} value={"false"} />
         </RadioGroup>
@@ -292,29 +326,29 @@ const EvaluationPageScreen3 = () => {
           setValue={setSanitaryExtensionsNotes}
         />
         <Text>{t("faulty_floor_type")}</Text>
-        <RadioGroup onToggle={setFaultyFloorType}>
+        <RadioGroup defaultValue={faultyFloorType} onToggle={setFaultyFloorType}>
           <RadioButton label={t("Good")} value={"1"} />
           <RadioButton label={t("average")} value={"2"} />
           <RadioButton label={t("Bad")} value={"3"} />
         </RadioGroup>
         <Text>{t("type_of_plastering")}</Text>
-        <RadioGroup onToggle={setTypeOfPlastering}>
+        <RadioGroup defaultValue={typeOfPlastering} onToggle={setTypeOfPlastering}>
           <RadioButton label={t("cement")} value={"1"} />
           <RadioButton label={t("limestone")} value={"2"} />
         </RadioGroup>
         <Text>{t("plastering_condition")}</Text>
-        <RadioGroup onToggle={setPlasteringCondition}>
+        <RadioGroup defaultValue={palsteringCondition} onToggle={setPlasteringCondition}>
           <RadioButton label={t("Good")} value={"1"} />
           <RadioButton label={t("average")} value={"2"} />
           <RadioButton label={t("Bad")} value={"3"} />
         </RadioGroup>
         <Text>{t("type_of_kehla")}</Text>
-        <RadioGroup onToggle={setTypeOfKehla}>
+        <RadioGroup defaultValue={typeOfKehla} onToggle={setTypeOfKehla}>
           <RadioButton label={t("cement")} value={"1"} />
           <RadioButton label={t("limestone")} value={"2"} />
         </RadioGroup>
         <Text>{t("kehla_condition")}</Text>
-        <RadioGroup onToggle={setKehlaCondition}>
+        <RadioGroup defaultValue={kehlaCondition} onToggle={setKehlaCondition}>
           <RadioButton label={t("Good")} value={"1"} />
           <RadioButton label={t("average")} value={"2"} />
           <RadioButton label={t("Bad")} value={"3"} />
@@ -340,7 +374,7 @@ const EvaluationPageScreen3 = () => {
           setValue={setKitchenCondition}
         />
         <Text>{t("bathroom_condition")}</Text>
-        <RadioGroup onToggle={setBathroomCondition}>
+        <RadioGroup defaultValue={bathroomCondition} onToggle={setBathroomCondition}>
           <RadioButton label={t("sanitary")} value={"1"} />
           <RadioButton label={t("unsanitary")} value={"2"} />
         </RadioGroup>
@@ -350,7 +384,7 @@ const EvaluationPageScreen3 = () => {
           setValue={setBathroomNotes}
         />
         <Text>{t("structural_issues")}</Text>
-        <RadioGroup onToggle={setStructuralIssues}>
+        <RadioGroup defaultValue={structuralIssues} onToggle={setStructuralIssues}>
           <RadioButton label={t("safe")} value={"1"} />
           <RadioButton label={t("average")} value={"2"} />
           <RadioButton label={t("dangerous")} value={"3"} />
@@ -361,9 +395,13 @@ const EvaluationPageScreen3 = () => {
           setValue={setDescribeIssues}
         />
         <Text style={{ marginTop: 20 }}>{t("infrastructure")}</Text>
-        <TextInput label={t("water")} value={water} setValue={setWater} />
         <TextInput label={t("leakage")} value={leakage} setValue={setLeakage} />
         <TextInput label={t("sewerage")} value={sewerage} setValue={setSewerage} />
+        <TextInput
+          label={t("WaterProblemsMentionedByTheBeneficiary")}
+          value={WaterProblemsMentionedByTheBeneficiary}
+          setValue={setWaterProblemsMentionedByTheBeneficiary}
+        />
         <TextInput
           label={t("electricity")}
           value={electricity}
@@ -380,16 +418,22 @@ const EvaluationPageScreen3 = () => {
           value={generalCondition}
           setValue={setGeneralCondition}
         />
-        <TextInput label={t("lawsuits")} value={lawsuits} setValue={setLawsuits} />
+        {/*<TextInput label={t("lawsuits")} value={lawsuits} setValue={setLawsuits} />*/}
+        <TextInput
+          label={t("TheVisionOfTheBeneficiariesOfTheRequiredWork")}
+          value={TheVisionOfTheBeneficiariesOfTheRequiredWork}
+          setValue={setTheVisionOfTheBeneficiariesOfTheRequiredWork}
+        />
         <TextInput
           label={t("recommendation")}
           value={recommendation}
           setValue={setRecommendation}
         />
         <Button
-          onPress={() => {
-
-            const form = { ...pageOne, ...pageTwo,
+          onPress={async () => {
+            const form = {
+              ...pageOne,
+              ...pageTwo,
               YearRenovation: houseWasRenovatedIn,
               BuildingAge: houseAge,
               NumberOfBlanks: spacesCount,
@@ -401,6 +445,10 @@ const EvaluationPageScreen3 = () => {
               PlumbingNotes: sanitaryExtensionsNotes,
               GroundDamagedCase: faultyFloorType,
               DamagedPlasterCase: palsteringCondition,
+              ConstructionProblems: 1,
+              DamagedGroundType: 1,
+              SubscriberServiceID: pageOne.SubscriberServiceID,
+              TheVisionOfTheBeneficiariesOfTheRequiredWork,
               WhatTypeOfPlasterIsDamaged: typeOfPlastering,
               DamagedKohlCase: kehlaCondition,
               WhatTypeOfKohlIsDamaged: typeOfKehla,
@@ -412,8 +460,8 @@ const EvaluationPageScreen3 = () => {
               BathroomNotes: bathroomNotes,
               AreThereConstructionProblems: structuralIssues,
               DescribeTheSymptomsOfTheProblem: describeIssues,
-              WaterProblemsMentionedByTheBeneficiary: infrastructure,
-              EffectsOfLeakageOrImminentDamageToTheNetwork :leakage,
+              WaterProblemsMentionedByTheBeneficiary,
+              EffectsOfLeakageOrImminentDamageToTheNetwork: leakage,
               SanitationProblemsMentionedByTheBeneficiary: sewerage,
               ElectricityProblemsMentionedByTheBeneficiary: electricity,
               InternalAndExternalExtensions: Extensions,
@@ -421,13 +469,38 @@ const EvaluationPageScreen3 = () => {
               AdditionalIssuesAndNotes: specificIssues,
               ConclusionAndRecommendations: recommendation
             };
-            applicationsAPI.AddApplicationForm(
+
+            let orders = []
+            await retrieveItem("Orders").then(res => {
+              orders = res || [];
+            })
+
+            const currentOrderIndex = orders.findIndex(item => item.SubscriberServiceID === pageOne.SubscriberServiceID);
+
+            const newOrder = {
+              ...order,
+              SubscriberServiceID: pageOne.SubscriberServiceID,
+              userId: userToken,
+              EvaluationForm: form,
+              Location: pageOne.Location
+            };
+
+            const tempOrders = orders;
+            tempOrders[currentOrderIndex] = newOrder;
+            await storeItem("Orders", tempOrders);
+            navigation.goBack();
+            navigation.goBack();
+            /*            applicationsAPI.AddApplicationForm(
               pageOne.SubscriberServiceID,
               userToken,
-              form
-            );
+              form,
+              pageOne.RoleId,
+              pageOne.Location,
+              []
+            );*/
+/*
             navigation.goBack();
-            navigation.goBack();
+*/
           }}
           style={{
             borderTopWidth: 0.5,
